@@ -1,13 +1,14 @@
 // Prisma schema for Event Horizon Gallery Gate
-// Uses SQLite for development, Postgres for production
+// Uses PostgreSQL across development and production
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model GateSession {

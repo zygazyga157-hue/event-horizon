@@ -19,12 +19,11 @@ A monochrome, museum-style portfolio website with capacity-limited access. Built
 ## Quick Start
 
 ```bash
-# Install dependencies
+# Install dependencies (postinstall runs `prisma generate`)
 npm install
 
-# Generate Prisma client and create SQLite database
-npx prisma generate
-npx prisma db push
+# Apply migrations to your Postgres database
+npm run db:migrate:deploy
 
 # Start development server (standard)
 npm run dev
@@ -40,7 +39,7 @@ Visit [http://localhost:3000](http://localhost:3000) to see the Gate.
 ```
 event-horizon/
 ├── prisma/
-│   └── schema.prisma          # Database schema (SQLite dev, Postgres prod)
+│   └── schema.prisma          # Database schema (Postgres)
 ├── src/
 │   ├── app/
 │   │   ├── api/gate/          # Gate API routes
@@ -104,9 +103,11 @@ event-horizon/
 # Iron secret for token signing (min 32 chars)
 IRON_SECRET="your-secret-here"
 
-# Database URL
-DATABASE_URL="file:./dev.db"        # SQLite for dev
-# DATABASE_URL="postgresql://..."   # Postgres for prod
+# Postgres connection used by app runtime
+DATABASE_URL="postgresql://user:password@host:5432/event_horizon?sslmode=require"
+
+# Direct Postgres connection used by Prisma Migrate
+DIRECT_URL="postgresql://user:password@host:5432/event_horizon?sslmode=require"
 ```
 
 ## Configuration
@@ -123,7 +124,7 @@ Edit [src/lib/config/env.ts](src/lib/config/env.ts) to adjust:
 - **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
-- **Database**: Prisma + SQLite (dev) / Postgres (prod)
+- **Database**: Prisma + Postgres
 - **Auth**: @hapi/iron (sealed tokens)
 - **Validation**: Zod
 - **Animation**: Framer Motion
@@ -150,9 +151,23 @@ The esoteric messaging system:
 |--------|-------------|
 | `npm run dev` | Standard Next.js dev server |
 | `npm run dev:ws` | Custom server with WebSocket support |
+| `npm run prisma:generate` | Generate Prisma client |
+| `npm run db:migrate:deploy` | Apply migrations (production-safe) |
+| `npm run db:studio` | Open Prisma Studio |
 | `npm run build` | Production build |
 | `npm run start` | Production server (no WS) |
 | `npm run start:ws` | Production server with WebSocket |
+
+## Vercel Deployment
+
+- Keep build command as `npm run build` (includes `prisma generate`).
+- Configure these required environment variables in Vercel:
+  - `DATABASE_URL`
+  - `DIRECT_URL`
+  - `IRON_SECRET`
+  - SMTP variables if using contact/admin passkey email.
+- Run `npm run db:migrate:deploy` in CI/CD before production rollout.
+- Avoid running migrations on shared preview databases.
 
 ## WebSocket API
 

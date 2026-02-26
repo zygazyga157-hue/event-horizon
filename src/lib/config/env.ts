@@ -10,9 +10,15 @@ function getEnvVar(key: string, fallback?: string): string {
   return value;
 }
 
+const requiredEnv = {
+  ironSecret: getEnvVar("IRON_SECRET"),
+  databaseUrl: getEnvVar("DATABASE_URL"),
+  directUrl: getEnvVar("DIRECT_URL"),
+} as const;
+
 export const config = {
   // Iron token signing
-  ironSecret: () => getEnvVar("IRON_SECRET", "dev-secret-must-be-at-least-32-characters-long"),
+  ironSecret: () => requiredEnv.ironSecret,
   
   // Gate settings
   gate: {
@@ -31,7 +37,8 @@ export const config = {
   },
 
   // Database
-  databaseUrl: () => getEnvVar("DATABASE_URL", "file:./dev.db"),
+  databaseUrl: () => requiredEnv.databaseUrl,
+  directUrl: () => requiredEnv.directUrl,
 
   // Runtime checks
   isDev: process.env.NODE_ENV !== "production",
