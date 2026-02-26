@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <!-- Background -->
+  <rect width="180" height="180" fill="#FAFAFA"/>
+  
+  <!-- Measurement frame corners -->
+  <path d="M12 12 L12 32 M12 12 L32 12" stroke="#0B0B0B" stroke-width="2" fill="none"/>
+  <path d="M168 12 L168 32 M168 12 L148 12" stroke="#0B0B0B" stroke-width="2" fill="none"/>
+  <path d="M12 168 L12 148 M12 168 L32 168" stroke="#0B0B0B" stroke-width="2" fill="none"/>
+  <path d="M168 168 L168 148 M168 168 L148 168" stroke="#0B0B0B" stroke-width="2" fill="none"/>
+  
+  <!-- Subtle grid tick marks -->
+  <line x1="90" y1="18" x2="90" y2="24" stroke="#0B0B0B" stroke-width="1" opacity="0.3"/>
+  <line x1="90" y1="156" x2="90" y2="162" stroke="#0B0B0B" stroke-width="1" opacity="0.3"/>
+  <line x1="18" y1="90" x2="24" y2="90" stroke="#0B0B0B" stroke-width="1" opacity="0.3"/>
+  <line x1="156" y1="90" x2="162" y2="90" stroke="#0B0B0B" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Main title - stacked -->
+  <text x="90" y="72" font-family="system-ui, sans-serif" font-size="24" font-weight="500" fill="#0B0B0B" text-anchor="middle" letter-spacing="4">PROJECT</text>
+  <text x="90" y="105" font-family="system-ui, sans-serif" font-size="32" font-weight="600" fill="#0B0B0B" text-anchor="middle" letter-spacing="6">ZYGA</text>
+  
+  <!-- Bottom stamp -->
+  <text x="90" y="145" font-family="monospace" font-size="10" fill="#0B0B0B" text-anchor="middle" opacity="0.5">157</text>
+  
+  <!-- Red dot accent -->
+  <circle cx="156" cy="156" r="4" fill="#C41E3A"/>
+</svg>

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0B0B0B" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Offline — PROJECT ZYGA</title>
+    <style>
+      :root {
+        --paper: #FAFAFA;
+        --ink: #0B0B0B;
+        --fog: rgba(11, 11, 11, 0.55);
+        --hair: rgba(11, 11, 11, 0.12);
+      }
+      
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      
+      .container {
+        max-width: 480px;
+        width: 100%;
+      }
+      
+      .frame {
+        position: relative;
+        background: white;
+        border: 1px solid var(--hair);
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 
+          0 1px 2px rgba(11, 11, 11, 0.04),
+          0 4px 12px rgba(11, 11, 11, 0.06);
+      }
+      
+      /* Measurement frame corners */
+      .frame::before,
+      .frame::after {
+        content: "";
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        border-color: var(--ink);
+        border-style: solid;
+        opacity: 0.2;
+      }
+      
+      .frame::before {
+        top: 8px;
+        left: 8px;
+        border-width: 1px 0 0 1px;
+      }
+      
+      .frame::after {
+        bottom: 8px;
+        right: 8px;
+        border-width: 0 1px 1px 0;
+      }
+      
+      .meta {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--fog);
+        margin-bottom: 16px;
+      }
+      
+      h1 {
+        font-size: 28px;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        margin-bottom: 12px;
+      }
+      
+      .description {
+        color: var(--fog);
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+      
+      .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.15s ease;
+        cursor: pointer;
+        border: none;
+        font-family: inherit;
+      }
+      
+      .btn-primary {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      
+      .btn-primary:hover {
+        opacity: 0.85;
+      }
+      
+      .btn-secondary {
+        background: transparent;
+        color: var(--ink);
+        border: 1px solid var(--hair);
+      }
+      
+      .btn-secondary:hover {
+        background: rgba(11, 11, 11, 0.04);
+      }
+      
+      .footer {
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid var(--hair);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 10px;
+        color: var(--fog);
+        text-align: center;
+        letter-spacing: 0.05em;
+      }
+      
+      /* Pulse animation for status indicator */
+      .status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #C41E3A;
+        border-radius: 50%;
+        margin-right: 8px;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="frame">
+        <div class="meta">
+          <span class="status-dot"></span>
+          157 // SIGNAL LOST
+        </div>
+        
+        <h1>Connection Interrupted</h1>
+        
+        <p class="description">
+          The gallery cannot be reached at this time. 
+          Please check your network connection and try again.
+        </p>
+        
+        <div class="actions">
+          <button class="btn btn-primary" onclick="window.location.reload()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 4v6h-6M1 20v-6h6"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            Retry Connection
+          </button>
+          
+          <a href="/gate" class="btn btn-secondary">
+            Return to Gate
+          </a>
+        </div>
+        
+        <div class="footer">
+          PROJECT ZYGA — Event Horizon Gallery
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      // Auto-retry when connection is restored
+      window.addEventListener("online", () => {
+        window.location.reload();
+      });
+    </script>
+  </body>
+</html>

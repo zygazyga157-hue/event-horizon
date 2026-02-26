@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" fill="#FAFAFA"/>
+  
+  <!-- Measurement frame corners (simplified) -->
+  <path d="M2 2 L2 6 M2 2 L6 2" stroke="#0B0B0B" stroke-width="1.5" fill="none"/>
+  <path d="M30 2 L30 6 M30 2 L26 2" stroke="#0B0B0B" stroke-width="1.5" fill="none"/>
+  <path d="M2 30 L2 26 M2 30 L6 30" stroke="#0B0B0B" stroke-width="1.5" fill="none"/>
+  <path d="M30 30 L30 26 M30 30 L26 30" stroke="#0B0B0B" stroke-width="1.5" fill="none"/>
+  
+  <!-- Z monogram -->
+  <text x="16" y="22" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#0B0B0B" text-anchor="middle">Z</text>
+  
+  <!-- Red dot accent -->
+  <circle cx="26" cy="26" r="2" fill="#C41E3A"/>
+</svg>

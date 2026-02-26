@@ -1,0 +1,139 @@
+// Prisma schema for Event Horizon Gallery Gate
+// Uses SQLite for development, Postgres for production
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model GateSession {
+  id          String   @id @default(uuid())
+  displayName String
+  email       String?
+  purpose     String?
+  status      String   @default("ACTIVE") // ACTIVE, QUEUED, EXPIRED, EXITED
+  tokenHash   String   @unique
+  ipHash      String
+  isAdmin     Boolean  @default(false)
+  queuedAt    DateTime?
+  enteredAt   DateTime?
+  lastSeenAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@index([status, lastSeenAt])
+  @@index([status, queuedAt])
+  @@index([tokenHash])
+}
+
+// Admin passkey for elevated access
+model AdminPasskey {
+  id          String   @id @default(uuid())
+  email       String
+  passkeyHash String
+  expiresAt   DateTime
+  usedAt      DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([email, expiresAt])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Bidding System Models
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Auction {
+  id               String    @id @default(uuid())
+  exhibitSlug      String    @unique // One auction per exhibit
+  kind             String    // ACQUIREMENT | FUNDING
+  status           String    @default("DRAFT") // DRAFT | SCHEDULED | LIVE | PAUSED | ENDED
+  currency         String    @default("USD")
+  openingBid       Int       // Stored in cents
+  minIncrement     Int       // Stored in cents
+  currentBid       Int?      // Stored in cents
+  leadingBidderId  String?
+  scheduledStart   DateTime? // When auction should go live
+  endsAt           DateTime?
+  endedAt          DateTime? // Actual end time
+  winnerId         String?   // Winning bidder ID
+  winnerEmail      String?
+  invoiceSentAt    DateTime?
+  paidAt           DateTime?
+  antiSnipingSeconds Int     @default(300) // 5 minutes
+  allowedBidTypes  String    // JSON array of bid types
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  bids    Bid[]
+  states  AuctionState[]
+
+  @@index([status])
+  @@index([endsAt])
+  @@index([scheduledStart])
+}
+
+model Bid {
+  id          String   @id @default(uuid())
+  auctionId   String
+  bidderId    String   // Email or anonymous token
+  bidderName  String
+  bidderEmail String?
+  bidType     String   // FIXED_PRICE | HOURLY_RATE | RETAINER | DONATION | etc.
+  amount      Int      // Stored in cents
+  message     String?
+  isWinning   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  auction     Auction  @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+
+  @@index([auctionId, createdAt])
+  @@index([bidderId])
+}
+
+model AuctionState {
+  id          String   @id @default(uuid())
+  auctionId   String
+  currentBid  Int?
+  leadingName String?
+  bidCount    Int      @default(0)
+  endsAt      DateTime?
+  status      String
+  capturedAt  DateTime @default(now())
+
+  auction     Auction  @relation(fields: [auctionId], references: [id], onDelete: Cascade)
+
+  @@index([auctionId, capturedAt])
+}
+
+model EmailOutbox {
+  id          String   @id @default(uuid())
+  toAddress   String
+  subject     String
+  htmlBody    String
+  textBody    String?
+  status      String   @default("PENDING") // PENDING | SENT | FAILED
+  attempts    Int      @default(0)
+  lastError   String?
+  sentAt      DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([status, createdAt])
+}
+
+// Audit log for admin actions
+model AuditLog {
+  id          String   @id @default(uuid())
+  sessionId   String
+  action      String   // AUCTION_CREATE | AUCTION_UPDATE | AUCTION_END | INVOICE_SENT | etc.
+  entityType  String   // AUCTION | BID | EMAIL
+  entityId    String
+  details     String?  // JSON blob of changes
+  createdAt   DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([sessionId])
+  @@index([createdAt])
+}
