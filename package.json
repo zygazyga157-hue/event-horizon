@@ -6,6 +6,7 @@
     "dev": "next dev",
     "dev:ws": "tsx watch server.ts",
     "build": "prisma generate && next build",
+    "build:vercel": "prisma migrate deploy && npm run build",
     "start": "next start",
     "start:ws": "tsx server.ts",
     "workers": "tsx src/workers/run.ts",

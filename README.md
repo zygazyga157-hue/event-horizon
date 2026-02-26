@@ -160,7 +160,8 @@ The esoteric messaging system:
 
 ## Vercel Deployment
 
-- Keep build command as `npm run build` (includes `prisma generate`).
+- Set Vercel Build Command to `npm run build:vercel`.
+- `build:vercel` runs `prisma migrate deploy` before `next build`.
 - Configure these required environment variables in Vercel:
   - `DATABASE_URL`
   - `DIRECT_URL`
